@@ -22,7 +22,31 @@ features<- read.table("./features.txt")
 #reading activity labels
 labels<- read.table("./activity_labels.txt")
 
+#labeling colnames for training set
+colnames(xtrain)<- features [,2]
+colnames(ytrain)<- "activityid"
+colnames(subtrain)<- "subid"
+names(xtrain)<- tolower(gsub(",", "" , names(xtrain)))
 
+#labeling colnames for test set 
+colnames(xtest)<- features [,2]
+colnames(ytest)<- "activityid"
+colnames(subtest)<- "subid"
+names(xtest)<- tolower(gsub(",", "" , names(xtest)))
 
+#labeling colnames for activity label list
+colnames(labels)<- c("activityid", "activitylabel")
 
-head(subtest,3)
+#merging all data sets
+mtrain<- cbind(subtrain, ytrain, xtrain)
+mtest<- cbind(subtest, ytest,xtest)
+all<- rbind(mtrain,mtestt)
+
+#extracting columns with mean data for each variable using grep to call for column number to subset columns into meandata 
+# "|" is used to search up  
+meandata<- all[,grep("subid|activityid|mean|std" , names(all))]
+
+#matching activityid ot activity labels 
+withlabels<- merge(all, labels,by = "activityid", all.x = T)
+
+aggregate()
